@@ -1,37 +1,85 @@
-//common js modules
+// CommonJS modules
 const express = require('express'); // 'require' ek function hai jo Express module ko import karta hai
 const app = express(); // Express function ko call karke ek app banayi gayi jo server banayega
 
 // Server ko port 3000 par run kar rahe hain
 app.listen(3000, () => {
-    console.log("Server running at port 3000");
+    console.log("Server running at http://localhost:3000");
 });
 
 // Root route (homepage)
 app.get('/', (req, res) => {
-    res.send("Hello Everyone"); // res.send likhna zaroori hai
+    res.send("Hello Everyone");
 });
 
-// Route for /name
-app.get('/name', (req, res) => {
-    res.send("My name is Ayesha"); // res.send missing tha
+// Route for /
+app.get('/', (req, res) => {
+    res.send("My name is Ayesha");
 });
 
-// Route for /uni
-app.get('/uni', (req, res) => {
-    res.send("I am studying in Bahria University"); // res.send missing tha
+// Route for /
+app.get('/', (req, res) => {
+    res.send("I am studying in Bahria University");
 });
 
-// Route for /hobby
-app.get('/hobby', (req, res) => {
-    res.send("My hobbies are painting and sketching"); // res.send missing tha
+// Route for /
+app.get('/', (req, res) => {
+    res.send("My hobbies are painting and sketching");
 });
 
-// Route for /friends
-app.get('/friends', (req, res) => {
-    res.send("I have 4 friends"); // res.send missing tha
+// Route for /
+app.get('/', (req, res) => {
+    res.send("I have 4 friends");
 });
 
+// Route for /name/user/:id (dynamic route)
+app.get('/name/user/:id', (req, res) => {
+    const { id } = req.params;
+    res.send(`id ; ${id}`); // Example: /name/user/5 → { id: "5" }
+});
 
-const second = require("./second")
-console.log("Hello world", second)
+// Route for /contact/:contactid/user/:userid
+app.get('/contact/:contactid/user/:userid', (req, res) => {
+    res.send(req.params); // Example: /contact/123/user/456 → { contactid: "123", userid: "456" }
+});
+
+// Route for /profile
+app.get('/profile', (req, res) => {
+    res.send(req.params);
+});
+
+app.get('/product/:productid', (req, res) => {
+    res.send(req.params);
+});
+app.get('/category/electronics/items/:itemid', (req, res) => {
+    res.send(req.params);
+});
+app.get('/admin/dashboards', (req, res) => {
+    res.send(req.params);
+});
+
+// New route: /user/info
+app.get('/user/info', (req, res) => {
+    res.send("User Information Page");
+});
+
+// New route: /products/view/:id
+app.get('/products/view/:id', (req, res) => {
+    res.send(`Viewing Product ID: ${req.params.id}`);
+});
+
+// New route: /shop/:type/items/:itemId
+app.get('/shop/:type/items/:itemId', (req, res) => {
+    const { type, itemId } = req.params;
+    // res.send(`Shop: type ${req.params.type}, item ${req.params.itemId}`);
+    res.send(`Shop: type ${type}, item ${itemId}`);
+});
+
+// New route: /admin/panel/overview
+app.get('/admin/panel/overview', (req, res) => {
+    res.send("Admin Panel Overview");
+});
+
+// Importing another module
+const second = require("./second");
+console.log("Hello world", second);
