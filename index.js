@@ -1,6 +1,8 @@
 // CommonJS modules
 const express = require('express'); // 'require' ek function hai jo Express module ko import karta hai
 const app = express(); // Express function ko call karke ek app banayi gayi jo server banayega
+const path = require('path'); // 'path' module is used to handle and work with file and directory paths
+
 
 // Server ko port 3000 par run kar rahe hain
 app.listen(3000, () => {
@@ -120,8 +122,71 @@ app.get('/google', (req, res) => { // is ma hum /google domain ma type kartay hi
 });
 
 // ****** res.render() *******
-
+app.get('/render', (req, res) => {
+    // Assuming you're using a view engine like EJS or Pug
+    res.render('index', { title: 'Home Page', message: 'Welcome to our site!' });
+});
 
 // ****** res.download() *******
+app.get('/download', (req, res) => {
+    const filePath = path.join(__dirname, 'files', 'sample.txt');
+    res.download(filePath, 'myDownloadedFile.txt', (err) => {
+        if (err) {
+            console.log("Error downloading file:", err);
+        }
+    });
+});
 
+// ****** res.sendFile() *******
+app.get('/sendFile', (req, res) => {
+    const filePath = path.join(__dirname, 'files', 'pic2.jpg');
+    res.sendFile(filePath);
+});
 
+// ****** res.end() *******
+app.get('/end', (req, res) => {
+    res.write('This is a partial response...');
+    res.end('Now ending the response.'); // Ends the response
+});
+
+// ****** res.sentStatus() *******
+app.get('/notfound', (req, res) => {
+    res.sendStatus(404); // Sends just the status code 404 and its message "Not Found"
+});
+
+// ****** res.headersSent() *******
+app.get('/headersSent', (req, res) => {
+    res.send('Welcome to our website...');
+
+    if (res.headersSent) {
+        console.log("Headers are already sent");
+    } else {
+        console.log("Headers are not sent");
+    }
+});
+
+// ****** res.set() *******
+app.get('/set-headers', (req, res) => {
+    // Set a single header
+    res.set('Content-Type', 'application/json');
+
+    // Set multiple headers at once (using an object)
+    res.set({
+        'Powered-By': 'Express',
+        'Custom-Header': 'HelloWorld',
+        'Cache-Control': 'no-cache'
+    });
+
+    res.json({ message: 'Headers have been set!' });
+});
+
+// ****** res.get() *******
+app.get('/getHeader', (req, res) => {
+    // First set a header
+    res.set('Custom-Header', 'HelloWorld');
+
+    // Then get that header
+    const customHeader = res.get('Custom-Header');
+
+    res.send(`The custom header value is: ${customHeader}`);
+});
